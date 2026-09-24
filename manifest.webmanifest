@@ -1,0 +1,12 @@
+{
+  "name": "Gestor de Proyectos",
+  "short_name": "Gestor",
+  "description": "Gestiona proyectos, tareas, costes y evaluaciones sin conexion.",
+  "lang": "es",
+  "start_url": "./gestor.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f8f9fa",
+  "theme_color": "#4472C4"
+}

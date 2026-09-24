@@ -1,0 +1,12 @@
+{
+  "name": "gestor-de-proyectos-publico",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gestor de proyectos colaborativo con API compartida",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
