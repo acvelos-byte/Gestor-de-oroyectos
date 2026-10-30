@@ -1,8 +1,10 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const PORT = Number(process.env.PORT) || 3000;
+const SHARED_ACCESS_KEY = process.env.SHARED_ACCESS_KEY || '';
 const ROOT = __dirname;
 const DATA_FILE = path.join(ROOT, 'data.json');
 const MAX_BODY_BYTES = 5 * 1024 * 1024;
@@ -83,6 +85,11 @@ function serveFile(req, res, urlPath) {
     res.end('Forbidden');
     return;
   }
+  if (filePath === DATA_FILE || filePath === `${DATA_FILE}.tmp`) {
+    res.writeHead(404);
+    res.end('Not found');
+    return;
+  }
 
   fs.stat(filePath, (err, stats) => {
     if (err || !stats.isFile()) {
@@ -106,7 +113,7 @@ const server = http.createServer((req, res) => {
     res.writeHead(204, {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type'
+      'Access-Control-Allow-Headers': 'Content-Type, X-Access-Key'
     });
     res.end();
     return;
@@ -118,6 +125,17 @@ const server = http.createServer((req, res) => {
   }
 
   if (url.pathname === '/api/data') {
+    if (!SHARED_ACCESS_KEY) {
+      sendJson(res, { error: 'El servidor no tiene una clave de acceso configurada' }, 503);
+      return;
+    }
+    const suppliedKey = Buffer.from(req.headers['x-access-key'] || '');
+    const expectedKey = Buffer.from(SHARED_ACCESS_KEY);
+    if (suppliedKey.length !== expectedKey.length || !crypto.timingSafeEqual(suppliedKey, expectedKey)) {
+      sendJson(res, { error: 'Clave de acceso no válida' }, 401);
+      return;
+    }
+
     if (req.method === 'GET') {
       sendJson(res, readData());
       return;

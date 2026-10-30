@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gestor-proyectos-v1';
+const CACHE_NAME = 'gestor-proyectos-v2';
 const APP_FILES = ['./', './gestor.html', './manifest.webmanifest'];
 
 self.addEventListener('install', event => {

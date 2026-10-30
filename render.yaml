@@ -6,3 +6,6 @@ services:
     startCommand: npm start
     plan: free
     healthCheckPath: /health
+    envVars:
+      - key: SHARED_ACCESS_KEY
+        generateValue: true
