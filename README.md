@@ -1,2 +1,2 @@
-# Gestor-de-oroyectos
+# Gestor-de-proyectos
 Crm proyectos
